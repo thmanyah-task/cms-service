@@ -1,6 +1,6 @@
 databaseChangeLog:
   - include:
-      file: ./changelog/V1753044960768__create_cms_schema.sql
+      file: ./changelog/V1753044960768__create-cms-schema.sql
       relativeToChangelogFile: true
   - include:
       file: ./changelog/V1753048887645__add-category-table.sql
@@ -13,4 +13,16 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: ./changelog/V1753050576951__add-episode-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050576952__create-user-table-and-sequence.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050576953__add-role-table-and-sequence.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050576954__add-user-role-table-and-sequence.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050576955__add-content-editor-and-content-manager.sql
       relativeToChangelogFile: true
