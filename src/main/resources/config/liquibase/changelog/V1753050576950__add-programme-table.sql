@@ -2,13 +2,11 @@ create table cms."programme"(
 id int8 PRIMARY KEY,
 created_date TIMESTAMP,
 updated_date TIMESTAMP,
-published_date TIMESTAMP,
 subject VARCHAR (250),
 description TEXT,
 category_id int4,
 language_id int4,
-duration DOUBLE PRECISION,
-source_url TEXT,
+programme_url TEXT,
 FOREIGN KEY (category_id) REFERENCES cms."category"(id),
 FOREIGN KEY (language_id) REFERENCES cms."language"(id)
 );

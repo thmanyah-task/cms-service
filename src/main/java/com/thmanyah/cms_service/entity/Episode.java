@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "programme")
-public class Programme {
+@Table(name = "episode")
+public class Episode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,16 +23,18 @@ public class Programme {
     @Column
     private LocalDateTime updatedDate;
     @Column
+    private LocalDate publishedDate;
+    @Column
+    private Integer episodeNumber;
+    @Column
     private String subject;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @OneToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-    @OneToOne
-    @JoinColumn(name = "language_id")
-    private Language language;
+    @Column
+    private Double duration;
     @Column(columnDefinition = "TEXT")
-    private String programmeUrl;
-
+    private String episodeUrl;
+    @ManyToOne
+    @JoinColumn(name = "programme_id")
+    private Programme programme;
 }
