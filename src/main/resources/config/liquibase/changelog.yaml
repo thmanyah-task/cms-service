@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: ./changelog/V1753044960768__create_cms_schema.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753048887645__add-category-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050199736__add-language-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753050576950__add-programme-table.sql
+      relativeToChangelogFile: true
