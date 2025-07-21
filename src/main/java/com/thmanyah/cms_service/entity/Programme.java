@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "programme")
-public class programme {
+public class Programme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
