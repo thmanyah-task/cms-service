@@ -1,24 +1,25 @@
 package com.thmanyah.cms_service.programme.serviceImpl;
 
 import com.thmanyah.cms_service.episode.dto.EpisodeDto;
-import com.thmanyah.cms_service.episode.entity.Episode;
-import com.thmanyah.cms_service.episode.mapper.EpisodeMapper;
 import com.thmanyah.cms_service.episode.repository.EpisodeRepository;
 import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
 import com.thmanyah.cms_service.programme.entity.Category;
 import com.thmanyah.cms_service.programme.entity.Language;
 import com.thmanyah.cms_service.programme.entity.Programme;
-import com.thmanyah.cms_service.shared.exception.ValidationException;
 import com.thmanyah.cms_service.programme.mapper.ProgrammeMapper;
-import com.thmanyah.cms_service.programme.service.ProgrammeService;
 import com.thmanyah.cms_service.programme.repository.CategoryRepository;
 import com.thmanyah.cms_service.programme.repository.LanguageRepository;
 import com.thmanyah.cms_service.programme.repository.ProgrammeRepository;
+import com.thmanyah.cms_service.programme.service.ProgrammeService;
+import com.thmanyah.cms_service.shared.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,7 +30,6 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     private final ProgrammeMapper programmeMapper;
     private final LanguageRepository languageRepository;
     private final CategoryRepository categoryRepository;
-    private final EpisodeMapper episodeMapper;
     private final EpisodeRepository episodeRepository;
 
     @Override
@@ -91,5 +91,25 @@ public class ProgrammeServiceImpl implements ProgrammeService {
         List<EpisodeDto> episodeList = episodeRepository.findByProgrammeId(programmeId);
         programmeDto.setEpisodeDtoList(!episodeList.isEmpty() ? episodeList : new ArrayList<>());
         return programmeDto;
+    }
+
+    @Override
+    public Page<ProgrammeDto> findAllProgrammes(Integer page,Integer size) {
+        Pageable pageable;
+        if (page != null && size != null){
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        } else {
+            pageable = Pageable.unpaged();
+        }
+        Page<Programme> programmePage = programmeRepository.findAll(pageable);
+        if (programmePage.isEmpty()){
+            return Page.empty();
+        }
+        Page<ProgrammeDto> programmeDtos = programmePage.map(programmeMapper::mapToProgrammeDto);
+        programmeDtos.getContent().stream().forEach(programmeDto -> {
+            List<EpisodeDto> episodeDtoList = episodeRepository.findByProgrammeId(programmeDto.getId());
+            programmeDto.setEpisodeDtoList(episodeDtoList);
+        });
+        return programmeDtos;
     }
 }

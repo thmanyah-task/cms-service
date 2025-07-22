@@ -13,4 +13,6 @@ public class ApiResponse<T> {
     private LocalDateTime timestamp;
     private HttpStatus status;
     private T data;
+    private Integer totalPages;
+    private Long totalCount;
 }

@@ -6,11 +6,14 @@ import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
 import com.thmanyah.cms_service.programme.service.ProgrammeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/programme")
@@ -48,4 +51,19 @@ public class ProgrammeController {
                 .status(HttpStatus.OK)
                 .timestamp(LocalDateTime.now()).build();
     }
+
+
+    @GetMapping("/list")
+    public ApiResponse<List<ProgrammeDto>> getProgramme(@RequestParam(name = "page",required = true,defaultValue = "0") Integer page,
+                                                        @RequestParam(name = "size",required = true,defaultValue = "10") Integer size) {
+        Page<ProgrammeDto> programmeDtos = programmeService.findAllProgrammes(page, size);
+        return ApiResponse.<List<ProgrammeDto>>builder()
+                .data(programmeDtos.getContent())
+                .totalPages(programmeDtos.getTotalPages())
+                .totalCount(programmeDtos.getTotalElements())
+                .status(HttpStatus.OK)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
 }
