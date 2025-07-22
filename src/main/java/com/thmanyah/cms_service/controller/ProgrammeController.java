@@ -20,7 +20,7 @@ public class ProgrammeController {
     private final ProgrammeService programmeService;
 
     @PostMapping
-    @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+   @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
     public ApiResponse<Long> addNewProgramme(@Valid@RequestBody ProgrammeDto programmeDto){
         Long programmeId = programmeService.addNewProgramme(programmeDto);
         return ApiResponse.<Long>builder()
