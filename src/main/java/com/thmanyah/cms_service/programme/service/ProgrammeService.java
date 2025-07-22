@@ -7,4 +7,8 @@ public interface ProgrammeService {
     Long addNewProgramme(ProgrammeDto programmeDto);
 
     Long updateProgramme(ProgrammeDto programmeDto);
+
+    ProgrammeDto findById(Long programmeId);
+
+
 }

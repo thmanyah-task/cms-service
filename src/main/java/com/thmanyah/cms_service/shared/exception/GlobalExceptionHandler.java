@@ -23,14 +23,12 @@ import java.util.List;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler({ ValidationException.class })
-    public ResponseEntity<ErrorModel> handleBadRequestException(ValidationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorModel.builder().errorCode(HttpStatus.BAD_REQUEST)
-                .errorMessage(ex.getMessage()).errorTime(LocalDateTime.now()).build());
-    }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
         List<String> errors = new ArrayList<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -38,18 +36,53 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorModel.builder().errorCode(HttpStatus.BAD_REQUEST)
-                .errorMessage(errors.toString()).errorTime(LocalDateTime.now()).build());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorModel.builder()
+                        .errorCode(HttpStatus.BAD_REQUEST)
+                        .errorMessage(String.join("; ", errors))
+                        .errorTime(LocalDateTime.now())
+                        .build()
+        );
     }
 
-    @ExceptionHandler({ ConstraintViolationException.class })
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorModel> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorModel.builder().errorCode(HttpStatus.BAD_REQUEST)
-                .errorMessage(errors.toString()).errorTime(LocalDateTime.now()).build());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorModel.builder()
+                        .errorCode(HttpStatus.BAD_REQUEST)
+                        .errorMessage(String.join("; ", errors))
+                        .errorTime(LocalDateTime.now())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorModel> handleValidationException(ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorModel.builder()
+                        .errorCode(HttpStatus.BAD_REQUEST)
+                        .errorMessage(ex.getMessage())
+                        .errorTime(LocalDateTime.now())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorModel> handleGenericException(Exception ex, WebRequest request) {
+        log.error("Unhandled exception caught: {}", ex.getMessage(), ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ErrorModel.builder()
+                        .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .errorMessage(ex.getMessage() != null ? ex.getMessage() : "Unexpected error occurred")
+                        .errorTime(LocalDateTime.now())
+                        .build()
+        );
     }
 }

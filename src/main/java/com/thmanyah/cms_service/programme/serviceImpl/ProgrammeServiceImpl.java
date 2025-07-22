@@ -1,5 +1,9 @@
 package com.thmanyah.cms_service.programme.serviceImpl;
 
+import com.thmanyah.cms_service.episode.dto.EpisodeDto;
+import com.thmanyah.cms_service.episode.entity.Episode;
+import com.thmanyah.cms_service.episode.mapper.EpisodeMapper;
+import com.thmanyah.cms_service.episode.repository.EpisodeRepository;
 import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
 import com.thmanyah.cms_service.programme.entity.Category;
 import com.thmanyah.cms_service.programme.entity.Language;
@@ -14,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +29,8 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     private final ProgrammeMapper programmeMapper;
     private final LanguageRepository languageRepository;
     private final CategoryRepository categoryRepository;
+    private final EpisodeMapper episodeMapper;
+    private final EpisodeRepository episodeRepository;
 
     @Override
     public Long addNewProgramme(ProgrammeDto programmeDto) {
@@ -71,5 +79,17 @@ public class ProgrammeServiceImpl implements ProgrammeService {
         programme.setUpdatedDate(LocalDateTime.now());
         programmeRepository.save(programme);
         return programme.getId();
+    }
+
+    @Override
+    public ProgrammeDto findById(Long programmeId) {
+        Programme programme = programmeRepository.findById(programmeId).orElse(null);
+        if (programme == null){
+            throw new ValidationException("Provided Programme Id Is Not Existed");
+        }
+        ProgrammeDto programmeDto = programmeMapper.mapToProgrammeDto(programme);
+        List<EpisodeDto> episodeList = episodeRepository.findByProgrammeId(programmeId);
+        programmeDto.setEpisodeDtoList(!episodeList.isEmpty() ? episodeList : new ArrayList<>());
+        return programmeDto;
     }
 }

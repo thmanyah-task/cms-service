@@ -20,7 +20,7 @@ public class ProgrammeController {
     private final ProgrammeService programmeService;
 
     @PostMapping
-   @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+    @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
     public ApiResponse<Long> addNewProgramme(@Valid@RequestBody ProgrammeDto programmeDto){
         Long programmeId = programmeService.addNewProgramme(programmeDto);
         return ApiResponse.<Long>builder()
@@ -36,6 +36,16 @@ public class ProgrammeController {
         return ApiResponse.<Long>builder()
                 .data(programmeId)
                 .status(HttpStatus.CREATED)
+                .timestamp(LocalDateTime.now()).build();
+    }
+
+
+    @GetMapping("/{programmeId}")
+    public ApiResponse<ProgrammeDto> getProgramme(@PathVariable("programmeId") Long programmeId){
+        ProgrammeDto programmeDto = programmeService.findById(programmeId);
+        return ApiResponse.<ProgrammeDto>builder()
+                .data(programmeDto)
+                .status(HttpStatus.OK)
                 .timestamp(LocalDateTime.now()).build();
     }
 }

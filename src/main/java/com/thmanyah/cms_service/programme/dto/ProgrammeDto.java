@@ -1,6 +1,7 @@
 package com.thmanyah.cms_service.programme.dto;
 
 
+import com.thmanyah.cms_service.episode.dto.EpisodeDto;
 import com.thmanyah.cms_service.programme.entity.Category;
 import com.thmanyah.cms_service.programme.entity.Language;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +31,7 @@ public class ProgrammeDto {
         message = "Invalid URL format. Must start with http/https, include www, end with .com, and contain a path"
     )
     private String programmeUrl;
+    List<EpisodeDto> episodeDtoList;
 
 
 

@@ -1,11 +1,13 @@
 package com.thmanyah.cms_service.programme.entity;
 
 
+import com.thmanyah.cms_service.episode.entity.Episode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
