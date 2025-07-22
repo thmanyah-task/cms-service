@@ -30,8 +30,8 @@ public class User {
     private String password;
     @Column
     private String email;
-    @ManyToMany
-    @JoinTable(name="users_roles" , joinColumns=@JoinColumn(name="user_id") ,
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="user_role" , joinColumns=@JoinColumn(name="user_id") ,
             inverseJoinColumns=@JoinColumn(name="role_id"))
     private List<Role> roles;
 }
