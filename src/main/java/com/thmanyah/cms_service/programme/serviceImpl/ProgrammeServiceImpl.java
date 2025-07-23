@@ -16,10 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -94,22 +93,48 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     }
 
     @Override
-    public Page<ProgrammeDto> findAllProgrammes(Integer page,Integer size) {
+    public Page<ProgrammeDto> findAllProgrammes(
+            String programmeSubject,
+            String programmeDescription,
+            String categoryNameAr,
+            String languageNameAr,
+            String episodeSubject,
+            String episodeDescription,
+            Integer episodeNumber,
+            LocalDate publishedDate,
+            Integer page,
+            Integer size) {
         Pageable pageable;
-        if (page != null && size != null){
-            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        if (page != null && size != null && page > 0) {
+            pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         } else {
             pageable = Pageable.unpaged();
         }
-        Page<Programme> programmePage = programmeRepository.findAll(pageable);
-        if (programmePage.isEmpty()){
+
+        Page<Programme> programmePage = programmeRepository.filterAndFindProgrammes(
+                programmeSubject,
+                programmeDescription,
+                categoryNameAr,
+                languageNameAr,
+                episodeSubject,
+                episodeDescription,
+                episodeNumber,
+                publishedDate,
+                pageable
+        );
+
+        if (programmePage.isEmpty()) {
             return Page.empty();
         }
+
         Page<ProgrammeDto> programmeDtos = programmePage.map(programmeMapper::mapToProgrammeDto);
-        programmeDtos.getContent().stream().forEach(programmeDto -> {
+
+        programmeDtos.getContent().forEach(programmeDto -> {
             List<EpisodeDto> episodeDtoList = episodeRepository.findByProgrammeId(programmeDto.getId());
             programmeDto.setEpisodeDtoList(episodeDtoList);
         });
+
         return programmeDtos;
     }
+
 }

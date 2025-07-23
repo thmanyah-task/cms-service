@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+
 
 public interface ProgrammeService {
 
@@ -14,7 +16,18 @@ public interface ProgrammeService {
 
     ProgrammeDto findById(Long programmeId);
 
-    Page<ProgrammeDto> findAllProgrammes(Integer page,Integer size);
+    Page<ProgrammeDto> findAllProgrammes(
+            String programmeSubject,
+            String programmeDescription,
+            String categoryNameAr,
+            String languageNameAr,
+            String episodeSubject,
+            String episodeDescription,
+            Integer episodeNumber,
+            LocalDate publishedDate,
+            Integer page,
+            Integer size
+    );
 
 
 }

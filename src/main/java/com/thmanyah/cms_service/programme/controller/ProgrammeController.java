@@ -8,10 +8,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,10 +55,33 @@ public class ProgrammeController {
     }
 
 
+
     @GetMapping("/list")
-    public ApiResponse<List<ProgrammeDto>> getProgramme(@RequestParam(name = "page",required = true,defaultValue = "0") Integer page,
-                                                        @RequestParam(name = "size",required = true,defaultValue = "10") Integer size) {
-        Page<ProgrammeDto> programmeDtos = programmeService.findAllProgrammes(page, size);
+    public ApiResponse<List<ProgrammeDto>> getProgramme(
+            @RequestParam(name = "programmeSubject", required = false) String programmeSubject,
+            @RequestParam(name = "programmeDescription", required = false) String programmeDescription,
+            @RequestParam(name = "categoryNameAr", required = false) String categoryNameAr,
+            @RequestParam(name = "languageNameAr", required = false) String languageNameAr,
+            @RequestParam(name = "episodeSubject", required = false) String episodeSubject,
+            @RequestParam(name = "episodeDescription", required = false) String episodeDescription,
+            @RequestParam(name = "episodeNumber", required = false) Integer episodeNumber,
+            @RequestParam(name = "publishedDate", required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate publishedDate,
+            @RequestParam(name = "page", required = true) Integer page,
+            @RequestParam(name = "size", required = true) Integer size
+    ) {
+        Page<ProgrammeDto> programmeDtos = programmeService.findAllProgrammes(
+                programmeSubject,
+                programmeDescription,
+                categoryNameAr,
+                languageNameAr,
+                episodeSubject,
+                episodeDescription,
+                episodeNumber,
+                publishedDate,
+                page,
+                size
+        );
+
         return ApiResponse.<List<ProgrammeDto>>builder()
                 .data(programmeDtos.getContent())
                 .totalPages(programmeDtos.getTotalPages())
@@ -65,5 +90,6 @@ public class ProgrammeController {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
 
 }
