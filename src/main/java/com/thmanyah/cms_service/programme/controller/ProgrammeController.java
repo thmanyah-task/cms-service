@@ -57,7 +57,7 @@ public class ProgrammeController {
 
 
     @GetMapping("/list")
-    public ApiResponse<List<ProgrammeDto>> getProgramme(
+    public ApiResponse<List<ProgrammeDto>> getListOfProgrammes(
             @RequestParam(name = "programmeSubject", required = false) String programmeSubject,
             @RequestParam(name = "programmeDescription", required = false) String programmeDescription,
             @RequestParam(name = "categoryNameAr", required = false) String categoryNameAr,
