@@ -20,7 +20,8 @@ public interface EpisodeRepository extends JpaRepository<Episode,Long> {
             ep.subject,
             ep.description,
             ep.duration,
-            ep.episodeUrl)
+            ep.episodeUrl,
+            ep.thumbnail)
             from Episode ep 
             where ep.programme.id= :programmeId
             """)

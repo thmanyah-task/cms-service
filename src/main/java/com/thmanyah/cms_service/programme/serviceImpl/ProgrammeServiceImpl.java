@@ -96,12 +96,13 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     public Page<ProgrammeDto> findAllProgrammes(
             String programmeSubject,
             String programmeDescription,
+            LocalDate programmePublishedDate,
             String categoryNameAr,
             String languageNameAr,
             String episodeSubject,
             String episodeDescription,
             Integer episodeNumber,
-            LocalDate publishedDate,
+            LocalDate episodePublishedDate,
             Integer page,
             Integer size) {
         Pageable pageable;
@@ -114,12 +115,13 @@ public class ProgrammeServiceImpl implements ProgrammeService {
         Page<Programme> programmePage = programmeRepository.filterAndFindProgrammes(
                 programmeSubject,
                 programmeDescription,
+                programmePublishedDate,
                 categoryNameAr,
                 languageNameAr,
                 episodeSubject,
                 episodeDescription,
                 episodeNumber,
-                publishedDate,
+                episodePublishedDate,
                 pageable
         );
 

@@ -33,11 +33,16 @@ public class EpisodeDto {
             message = "Invalid URL format. Must start with http/https, include www, end with .com, and contain a path"
     )
     private String episodeUrl;
+    @Pattern(
+            regexp = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp|webp))$)",
+            message = "Thumbnail must be an image file (jpg, jpeg, png, gif, bmp, webp)"
+    )
+    private String thumbnail;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Programme programme;
 
 
-    public EpisodeDto(Long id, LocalDateTime createdDate, LocalDateTime updatedDate, LocalDate publishedDate, Integer episodeNumber, String subject, String description, Double duration, String episodeUrl) {
+    public EpisodeDto(Long id, LocalDateTime createdDate, LocalDateTime updatedDate, LocalDate publishedDate, Integer episodeNumber, String subject, String description, Double duration, String episodeUrl,String thumbnail) {
         this.id = id;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
@@ -47,6 +52,7 @@ public class EpisodeDto {
         this.description = description;
         this.duration = duration;
         this.episodeUrl = episodeUrl;
+        this.thumbnail = thumbnail;
     }
 
 }

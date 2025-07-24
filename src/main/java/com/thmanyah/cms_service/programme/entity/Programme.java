@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,5 +36,9 @@ public class Programme {
     private Language language;
     @Column(columnDefinition = "TEXT")
     private String programmeUrl;
+    @Column
+    private LocalDate publishedDate;
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
 
 }

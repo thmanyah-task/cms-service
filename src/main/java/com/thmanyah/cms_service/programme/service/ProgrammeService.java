@@ -19,12 +19,13 @@ public interface ProgrammeService {
     Page<ProgrammeDto> findAllProgrammes(
             String programmeSubject,
             String programmeDescription,
+            LocalDate programmePublishedDate,
             String categoryNameAr,
             String languageNameAr,
             String episodeSubject,
             String episodeDescription,
             Integer episodeNumber,
-            LocalDate publishedDate,
+            LocalDate episodePublishedDate,
             Integer page,
             Integer size
     );

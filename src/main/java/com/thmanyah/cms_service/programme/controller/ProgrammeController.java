@@ -60,24 +60,26 @@ public class ProgrammeController {
     public ApiResponse<List<ProgrammeDto>> getListOfProgrammes(
             @RequestParam(name = "programmeSubject", required = false) String programmeSubject,
             @RequestParam(name = "programmeDescription", required = false) String programmeDescription,
+            @RequestParam(name = "programmePublishedDate", required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate programmePublishedDate,
             @RequestParam(name = "categoryNameAr", required = false) String categoryNameAr,
             @RequestParam(name = "languageNameAr", required = false) String languageNameAr,
             @RequestParam(name = "episodeSubject", required = false) String episodeSubject,
             @RequestParam(name = "episodeDescription", required = false) String episodeDescription,
             @RequestParam(name = "episodeNumber", required = false) Integer episodeNumber,
-            @RequestParam(name = "publishedDate", required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate publishedDate,
+            @RequestParam(name = "episodePublishedDate", required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate episodePublishedDate,
             @RequestParam(name = "page", required = true) Integer page,
             @RequestParam(name = "size", required = true) Integer size
     ) {
         Page<ProgrammeDto> programmeDtos = programmeService.findAllProgrammes(
                 programmeSubject,
                 programmeDescription,
+                programmePublishedDate,
                 categoryNameAr,
                 languageNameAr,
                 episodeSubject,
                 episodeDescription,
                 episodeNumber,
-                publishedDate,
+                episodePublishedDate,
                 page,
                 size
         );

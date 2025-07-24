@@ -35,6 +35,8 @@ public class Episode {
     private Double duration;
     @Column(columnDefinition = "TEXT")
     private String episodeUrl;
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
     @ManyToOne
     @JoinColumn(name = "programme_id")
     private Programme programme;

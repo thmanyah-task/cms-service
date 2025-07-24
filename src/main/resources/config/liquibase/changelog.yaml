@@ -26,3 +26,6 @@ databaseChangeLog:
   - include:
       file: ./changelog/V1753050576955__add-content-editor-and-content-manager.sql
       relativeToChangelogFile: true
+  - include:
+      file: ./changelog/V1753360955371__add-missing-columns-published-date-and-thumbnail.sql
+      relativeToChangelogFile: true
