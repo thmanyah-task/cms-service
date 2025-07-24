@@ -4,6 +4,7 @@ package com.thmanyah.cms_service.episode.controller;
 import com.thmanyah.cms_service.shared.exception.dto.ApiResponse;
 import com.thmanyah.cms_service.episode.service.EpisodeService;
 import com.thmanyah.cms_service.episode.dto.EpisodeDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class EpisodeController {
 
     @PostMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ApiResponse<List<Long>> addNewEpisode(@Valid @RequestBody List<EpisodeDto> episodeDtos){
         List<Long> episodeIds = episodeService.addNewEpisodes(episodeDtos);
         return ApiResponse.<List<Long>>builder()
@@ -32,6 +34,7 @@ public class EpisodeController {
 
     @PutMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ApiResponse<Long> updateEpisode(@Valid @RequestBody EpisodeDto episodeDto){
         Long episodeId = episodeService.updateEpisode(episodeDto);
         return ApiResponse.<Long>builder()

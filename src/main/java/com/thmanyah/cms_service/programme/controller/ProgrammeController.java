@@ -4,6 +4,7 @@ package com.thmanyah.cms_service.programme.controller;
 import com.thmanyah.cms_service.shared.exception.dto.ApiResponse;
 import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
 import com.thmanyah.cms_service.programme.service.ProgrammeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class ProgrammeController {
 
     @PostMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ApiResponse<List<Long>> addNewProgramme(@Valid@RequestBody List<ProgrammeDto> programmeDtos){
         List<Long> programmeIds = programmeService.addNewProgrammes(programmeDtos);
         return ApiResponse.<List<Long>>builder()
@@ -36,6 +38,7 @@ public class ProgrammeController {
 
     @PutMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
+    @SecurityRequirement(name = "bearerAuth")
     public ApiResponse<Long> updateProgramme(@Valid@RequestBody ProgrammeDto programmeDto){
         Long programmeId = programmeService.updateProgramme(programmeDto);
         return ApiResponse.<Long>builder()
