@@ -10,6 +10,8 @@ import com.thmanyah.cms_service.shared.exception.ValidationException;
 import com.thmanyah.cms_service.programme.repository.ProgrammeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class EpisodeServiceImpl implements EpisodeService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public List<Long> addNewEpisodes(List<EpisodeDto> episodeDtoList) {
         if (episodeDtoList == null || episodeDtoList.isEmpty()) {
             throw new ValidationException("Episode list cannot be empty");
@@ -65,6 +68,7 @@ public class EpisodeServiceImpl implements EpisodeService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public Long updateEpisode(EpisodeDto episodeDto) {
         Episode episode = episodeRepository.findById(episodeDto.getId()).orElse(null);
         if (episode == null){

@@ -15,6 +15,8 @@ import com.thmanyah.cms_service.shared.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +37,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     private final EpisodeRepository episodeRepository;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public List<Long> addNewProgrammes(List<ProgrammeDto> programmeDtoList) {
         if (programmeDtoList == null || programmeDtoList.isEmpty()) {
             throw new ValidationException("Programme list cannot be null or empty");
@@ -74,6 +77,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public Long updateProgramme(ProgrammeDto programmeDto) {
         Programme programme = programmeRepository.findById(programmeDto.getId()).orElse(null);
         if (programme == null){
