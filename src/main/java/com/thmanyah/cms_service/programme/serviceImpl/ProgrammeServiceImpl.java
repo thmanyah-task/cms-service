@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,7 +104,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
             throw new ValidationException("Provided Programme Id Is Not Existed");
         }
         ProgrammeDto programmeDto = programmeMapper.mapToProgrammeDto(programme);
-        List<EpisodeDto> episodeList = episodeRepository.findByProgrammeId(programmeId);
+        List<EpisodeDto> episodeList = episodeRepository.findByProgrammeIds(Arrays.asList(programmeId));
         programmeDto.setEpisodeDtoList(!episodeList.isEmpty() ? episodeList : new ArrayList<>());
         return programmeDto;
     }
@@ -145,11 +148,17 @@ public class ProgrammeServiceImpl implements ProgrammeService {
 
         Page<ProgrammeDto> programmeDtos = programmePage.map(programmeMapper::mapToProgrammeDto);
 
-        programmeDtos.getContent().forEach(programmeDto -> {
-            List<EpisodeDto> episodeDtoList = episodeRepository.findByProgrammeId(programmeDto.getId());
-            programmeDto.setEpisodeDtoList(episodeDtoList);
-        });
+        List<Long> programmeIds = programmeDtos.getContent().stream()
+                .map(ProgrammeDto::getId)
+                .toList();
 
+        List<EpisodeDto> episodeDtoList = episodeRepository.findByProgrammeIds(programmeIds);
+        Map<Long, List<EpisodeDto>> episodeMap = episodeDtoList.stream()
+                .collect(Collectors.groupingBy(EpisodeDto::getProgrammeId));
+        programmeDtos.getContent().forEach(programmeDto -> {
+            List<EpisodeDto> episodes = episodeMap.getOrDefault(programmeDto.getId(), List.of());
+            programmeDto.setEpisodeDtoList(episodes);
+        });
         return programmeDtos;
     }
 

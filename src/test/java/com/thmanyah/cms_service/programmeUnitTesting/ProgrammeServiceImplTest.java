@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,7 +156,7 @@ public class ProgrammeServiceImplTest {
 
         when(programmeRepository.findById(programmeId)).thenReturn(Optional.of(mockProgramme));
         when(programmeMapper.mapToProgrammeDto(mockProgramme)).thenReturn(mappedDto);
-        when(episodeRepository.findByProgrammeId(programmeId)).thenReturn(episodeDtos);
+        when(episodeRepository.findByProgrammeIds(Arrays.asList(programmeId))).thenReturn(episodeDtos);
 
         ProgrammeDto result = programmeService.findById(programmeId);
 
@@ -166,7 +167,7 @@ public class ProgrammeServiceImplTest {
 
         verify(programmeRepository).findById(programmeId);
         verify(programmeMapper).mapToProgrammeDto(mockProgramme);
-        verify(episodeRepository).findByProgrammeId(programmeId);
+        verify(episodeRepository).findByProgrammeIds(Arrays.asList(programmeId));
     }
 
     @Test
@@ -179,6 +180,7 @@ public class ProgrammeServiceImplTest {
 
         EpisodeDto episodeDto = new EpisodeDto();
         episodeDto.setSubject("Episode 1");
+        episodeDto.setProgrammeId(1L);
 
         Page<Programme> mockPage = new PageImpl<>(List.of(programme));
 
@@ -188,7 +190,7 @@ public class ProgrammeServiceImplTest {
         )).thenReturn(mockPage);
 
         when(programmeMapper.mapToProgrammeDto(programme)).thenReturn(programmeDto);
-        when(episodeRepository.findByProgrammeId(1L)).thenReturn(List.of(episodeDto));
+        when(episodeRepository.findByProgrammeIds(Arrays.asList(1L))).thenReturn(List.of(episodeDto)); // ✅ correct method
 
         Page<ProgrammeDto> result = programmeService.findAllProgrammes(
                 "subject", "description", LocalDate.now(),
@@ -208,8 +210,9 @@ public class ProgrammeServiceImplTest {
                 anyString(), anyString(), any(), any(), any(Pageable.class)
         );
         verify(programmeMapper).mapToProgrammeDto(programme);
-        verify(episodeRepository).findByProgrammeId(1L);
+        verify(episodeRepository).findByProgrammeIds(Arrays.asList(1L));
     }
+
 
 
 

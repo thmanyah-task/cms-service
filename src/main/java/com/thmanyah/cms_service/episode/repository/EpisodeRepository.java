@@ -21,9 +21,10 @@ public interface EpisodeRepository extends JpaRepository<Episode,Long> {
             ep.description,
             ep.duration,
             ep.episodeUrl,
-            ep.thumbnail)
-            from Episode ep 
-            where ep.programme.id= :programmeId
+            ep.thumbnail,
+            ep.programme.id)
+            from Episode ep
+            where ep.programme.id in :programmeIds
             """)
-    List<EpisodeDto> findByProgrammeId(@Param("programmeId") Long programmeId);
+    List<EpisodeDto> findByProgrammeIds(@Param("programmeIds") List<Long> programmeIds);
 }

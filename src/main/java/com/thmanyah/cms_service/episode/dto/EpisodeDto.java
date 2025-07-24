@@ -40,9 +40,10 @@ public class EpisodeDto {
     private String thumbnail;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Programme programme;
+    private Long programmeId;
 
 
-    public EpisodeDto(Long id, LocalDateTime createdDate, LocalDateTime updatedDate, LocalDate publishedDate, Integer episodeNumber, String subject, String description, Double duration, String episodeUrl,String thumbnail) {
+    public EpisodeDto(Long id, LocalDateTime createdDate, LocalDateTime updatedDate, LocalDate publishedDate, Integer episodeNumber, String subject, String description, Double duration, String episodeUrl,String thumbnail,Long programmeId) {
         this.id = id;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
@@ -53,6 +54,7 @@ public class EpisodeDto {
         this.duration = duration;
         this.episodeUrl = episodeUrl;
         this.thumbnail = thumbnail;
+        this.programmeId = programmeId;
     }
 
 }
