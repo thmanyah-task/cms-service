@@ -81,4 +81,14 @@ public class EpisodeServiceImpl implements EpisodeService {
         episodeRepository.save(episode);
         return episode.getId();
     }
+
+    @Override
+    public EpisodeDto findEpisodeById(Long episodeId) {
+        Episode episode = episodeRepository.findById(episodeId).orElse(null);
+        if (episode == null){
+            throw new ValidationException("Episode Not Existed With The Given Provided Id");
+        }
+        EpisodeDto episodeDto = episodeMapper.mapToEpisodeDto(episode);
+        return episodeDto;
+    }
 }

@@ -39,4 +39,13 @@ public class EpisodeController {
                 .status(HttpStatus.CREATED)
                 .timestamp(LocalDateTime.now()).build();
     }
+
+    @GetMapping("/{episodeId}")
+    public ApiResponse<EpisodeDto> getEpisodeById(@PathVariable("episodeId") Long episodeId){
+        EpisodeDto episodeDto = episodeService.findEpisodeById(episodeId);
+        return ApiResponse.<EpisodeDto>builder()
+                .data(episodeDto)
+                .status(HttpStatus.CREATED)
+                .timestamp(LocalDateTime.now()).build();
+    }
 }

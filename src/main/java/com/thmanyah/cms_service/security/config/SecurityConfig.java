@@ -50,7 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/programme/{programmeId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/cms-be/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/programme/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/episode/{episodeId}").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
