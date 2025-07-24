@@ -32,29 +32,43 @@ public class ProgrammeServiceImpl implements ProgrammeService {
     private final EpisodeRepository episodeRepository;
 
     @Override
-    public Long addNewProgramme(ProgrammeDto programmeDto) {
-        if (programmeDto.getDescription() == null || programmeDto.getDescription().isEmpty()){
-            throw new ValidationException("Description Cannot Be Null");
+    public List<Long> addNewProgrammes(List<ProgrammeDto> programmeDtoList) {
+        if (programmeDtoList == null || programmeDtoList.isEmpty()) {
+            throw new ValidationException("Programme list cannot be null or empty");
         }
-        if (programmeDto.getSubject() == null || programmeDto.getSubject().isEmpty()){
-            throw new ValidationException("Subject Cannot Be Null");
+        List<Long> programmeIds = new ArrayList<>();
+
+        List<Programme> programmesToSave = new ArrayList<>();
+
+        for (ProgrammeDto dto : programmeDtoList) {
+            if (dto.getDescription() == null || dto.getDescription().isEmpty()) {
+                throw new ValidationException("Description cannot be null");
+            }
+            if (dto.getSubject() == null || dto.getSubject().isEmpty()) {
+                throw new ValidationException("Subject cannot be null");
+            }
+            if (dto.getProgrammeUrl() == null || dto.getProgrammeUrl().isEmpty()) {
+                throw new ValidationException("ProgrammeUrl cannot be null");
+            }
+            Category category = categoryRepository.findById(dto.getCategory().getId())
+                    .orElseThrow(() -> new ValidationException("No Category Found With The Provided Id"));
+            Language language = languageRepository.findById(dto.getLanguage().getId())
+                    .orElseThrow(() -> new ValidationException("No Language Found With The Provided Id"));
+
+            Programme programme = programmeMapper.mapToProgrammeEntity(dto);
+            programme.setCategory(category);
+            programme.setLanguage(language);
+            programme.setCreatedDate(LocalDateTime.now());
+            programmesToSave.add(programme);
         }
-        if (programmeDto.getProgrammeUrl() == null || programmeDto.getProgrammeUrl().isEmpty()){
-            throw new ValidationException("ProgrammeUrl Cannot Be Null");
+
+        List<Programme> savedProgramme = programmeRepository.saveAll(programmesToSave);
+        for (Programme p : savedProgramme) {
+            programmeIds.add(p.getId());
         }
-        Category category = categoryRepository.findById(programmeDto.getCategory().getId()).orElse(null);
-        if (category == null){
-            throw new ValidationException("No Category Found With The Provided Id");
-        }
-        Language language = languageRepository.findById(programmeDto.getLanguage().getId()).orElse(null);
-        if (language == null){
-            throw new ValidationException("No Language Found With The Provided Id");
-        }
-        Programme programme = programmeMapper.mapToProgrammeEntity(programmeDto);
-        programme.setCreatedDate(LocalDateTime.now());
-        programmeRepository.save(programme);
-        return programme.getId();
+        return programmeIds;
     }
+
 
     @Override
     public Long updateProgramme(ProgrammeDto programmeDto) {

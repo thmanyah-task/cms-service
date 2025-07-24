@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -24,34 +26,43 @@ public class EpisodeServiceImpl implements EpisodeService {
 
 
     @Override
-    public Long addNewEpisode(EpisodeDto episodeDto) {
-        Programme programme = programmeRepository.findById(episodeDto.getProgramme().getId()).orElse(null);
-        if (programme == null){
-            throw new ValidationException("Programme Cannot Be Found With The Provided ProgrammeId");
+    public List<Long> addNewEpisodes(List<EpisodeDto> episodeDtoList) {
+        if (episodeDtoList == null || episodeDtoList.isEmpty()) {
+            throw new ValidationException("Episode list cannot be empty");
         }
-        if (episodeDto.getDescription() == null || episodeDto.getDescription().isEmpty()){
-            throw new ValidationException("Description Cannot Be Null");
+        List<Long> episodeIds = new ArrayList<>();
+        for (EpisodeDto episodeDto : episodeDtoList) {
+            Programme programme = programmeRepository.findById(episodeDto.getProgramme().getId())
+                    .orElseThrow(() -> new ValidationException("Programme not found with ID: " + episodeDto.getProgramme().getId()));
+
+            if (episodeDto.getDescription() == null || episodeDto.getDescription().isEmpty()) {
+                throw new ValidationException("Description Cannot Be Null");
+            }
+            if (episodeDto.getSubject() == null || episodeDto.getSubject().isEmpty()) {
+                throw new ValidationException("Subject Cannot Be Null");
+            }
+            if (episodeDto.getEpisodeUrl() == null || episodeDto.getEpisodeUrl().isEmpty()) {
+                throw new ValidationException("EpisodeUrl Cannot Be Null");
+            }
+            if (episodeDto.getDuration() == null) {
+                throw new ValidationException("Duration Cannot Be Null");
+            }
+            if (episodeDto.getEpisodeNumber() == null) {
+                throw new ValidationException("EpisodeNumber Cannot Be Null");
+            }
+            if (episodeDto.getPublishedDate() == null) {
+                throw new ValidationException("Published Date Cannot Be Null");
+            }
+            Episode episode = episodeMapper.mapToEpisodeEntity(episodeDto);
+            episode.setCreatedDate(LocalDateTime.now());
+            episode.setProgramme(programme);
+            episodeRepository.save(episode);
+            episodeIds.add(episode.getId());
         }
-        if (episodeDto.getSubject() == null || episodeDto.getSubject().isEmpty()){
-            throw new ValidationException("Subject Cannot Be Null");
-        }
-        if (episodeDto.getEpisodeUrl() == null || episodeDto.getEpisodeUrl().isEmpty()){
-            throw new ValidationException("EpisodeUrl Cannot Be Null");
-        }
-        if (episodeDto.getDuration() == null){
-            throw new ValidationException("Duration Cannot Be Null");
-        }
-        if (episodeDto.getEpisodeNumber() == null){
-            throw new ValidationException("Episode Cannot Be Null");
-        }
-        if (episodeDto.getPublishedDate() == null){
-            throw new ValidationException("Published Date Cannot Be Null");
-        }
-        Episode episode = episodeMapper.mapToEpisodeEntity(episodeDto);
-        episode.setCreatedDate(LocalDateTime.now());
-        episodeRepository.save(episode);
-        return episode.getId();
+
+        return episodeIds;
     }
+
 
     @Override
     public Long updateEpisode(EpisodeDto episodeDto) {

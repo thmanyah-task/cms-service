@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/episode")
@@ -21,10 +22,10 @@ public class EpisodeController {
 
     @PostMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
-    public ApiResponse<Long> addNewEpisode(@Valid @RequestBody EpisodeDto episodeDto){
-        Long episodeId = episodeService.addNewEpisode(episodeDto);
-        return ApiResponse.<Long>builder()
-                .data(episodeId)
+    public ApiResponse<List<Long>> addNewEpisode(@Valid @RequestBody List<EpisodeDto> episodeDtos){
+        List<Long> episodeIds = episodeService.addNewEpisodes(episodeDtos);
+        return ApiResponse.<List<Long>>builder()
+                .data(episodeIds)
                 .status(HttpStatus.CREATED)
                 .timestamp(LocalDateTime.now()).build();
     }

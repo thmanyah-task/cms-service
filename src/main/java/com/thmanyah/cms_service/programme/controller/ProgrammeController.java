@@ -26,10 +26,10 @@ public class ProgrammeController {
 
     @PostMapping
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
-    public ApiResponse<Long> addNewProgramme(@Valid@RequestBody ProgrammeDto programmeDto){
-        Long programmeId = programmeService.addNewProgramme(programmeDto);
-        return ApiResponse.<Long>builder()
-                .data(programmeId)
+    public ApiResponse<List<Long>> addNewProgramme(@Valid@RequestBody List<ProgrammeDto> programmeDtos){
+        List<Long> programmeIds = programmeService.addNewProgrammes(programmeDtos);
+        return ApiResponse.<List<Long>>builder()
+                .data(programmeIds)
                 .status(HttpStatus.CREATED)
                 .timestamp(LocalDateTime.now()).build();
     }
