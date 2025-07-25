@@ -1,9 +1,9 @@
 package com.thmanyah.cms_service.episode.controller;
 
 
-import com.thmanyah.cms_service.shared.exception.dto.ApiResponse;
 import com.thmanyah.cms_service.episode.service.EpisodeService;
 import com.thmanyah.cms_service.episode.dto.EpisodeDto;
+import com.thmanyah.cms_service.shared.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

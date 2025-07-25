@@ -4,6 +4,7 @@ package com.thmanyah.cms_service.externalSearch.controller;
 import com.thmanyah.cms_service.externalSearch.enumerations.SourceType;
 import com.thmanyah.cms_service.externalSearch.service.ExternalImportService;
 import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
+import com.thmanyah.cms_service.shared.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,12 +30,12 @@ public class ExternalImportController {
     @GetMapping("/import")
     @PreAuthorize("hasRole('CONTENT_EDITOR') or hasRole('CONTENT_MANAGER')")
     @SecurityRequirement(name = "bearerAuth")
-    public com.thmanyah.cms_service.shared.exception.dto.ApiResponse<List<ProgrammeDto>> importData(
+    public ApiResponse<List<ProgrammeDto>> importData(
             @RequestParam SourceType sourceType,
             @RequestParam String searchQuery
     ) {
         List<ProgrammeDto> result = importService.importFromSource(sourceType, searchQuery);
-        return com.thmanyah.cms_service.shared.exception.dto.ApiResponse.<List<ProgrammeDto>>builder()
+        return ApiResponse.<List<ProgrammeDto>>builder()
                 .data(result)
                 .totalCount(result.stream().count())
                 .status(HttpStatus.OK)

@@ -1,4 +1,4 @@
-package com.thmanyah.cms_service.shared.exception.dto;
+package com.thmanyah.cms_service.shared.dto;
 
 
 import lombok.Builder;
