@@ -70,6 +70,7 @@ public class ProgrammeController {
             @RequestParam(name = "episodeDescription", required = false) String episodeDescription,
             @RequestParam(name = "episodeNumber", required = false) Integer episodeNumber,
             @RequestParam(name = "episodePublishedDate", required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate episodePublishedDate,
+            @RequestParam(name= "episodeDuration",required = false) Double episodeDuration,
             @RequestParam(name = "page", required = true) Integer page,
             @RequestParam(name = "size", required = true) Integer size
     ) {
@@ -83,6 +84,7 @@ public class ProgrammeController {
                 episodeDescription,
                 episodeNumber,
                 episodePublishedDate,
+                episodeDuration,
                 page,
                 size
         );

@@ -27,6 +27,7 @@ public interface ProgrammeService {
             String episodeDescription,
             Integer episodeNumber,
             LocalDate episodePublishedDate,
+            Double episodeDuration,
             Integer page,
             Integer size
     );

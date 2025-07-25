@@ -186,7 +186,7 @@ public class ProgrammeServiceImplTest {
 
         when(programmeRepository.filterAndFindProgrammes(
                 anyString(), anyString(), any(), anyString(), anyString(),
-                anyString(), anyString(), any(), any(), any(Pageable.class)
+                anyString(), anyString(), any(), any(),any(), any(Pageable.class)
         )).thenReturn(mockPage);
 
         when(programmeMapper.mapToProgrammeDto(programme)).thenReturn(programmeDto);
@@ -195,7 +195,7 @@ public class ProgrammeServiceImplTest {
         Page<ProgrammeDto> result = programmeService.findAllProgrammes(
                 "subject", "description", LocalDate.now(),
                 "category", "language", "epSubject",
-                "epDescription", 1, LocalDate.now(), 1, 10
+                "epDescription", 1, LocalDate.now(), 2.0,1, 10
         );
 
         assertNotNull(result);
@@ -207,7 +207,7 @@ public class ProgrammeServiceImplTest {
 
         verify(programmeRepository).filterAndFindProgrammes(
                 anyString(), anyString(), any(), anyString(), anyString(),
-                anyString(), anyString(), any(), any(), any(Pageable.class)
+                anyString(), anyString(), any(), any(),any(), any(Pageable.class)
         );
         verify(programmeMapper).mapToProgrammeDto(programme);
         verify(episodeRepository).findByProgrammeIds(Arrays.asList(1L));

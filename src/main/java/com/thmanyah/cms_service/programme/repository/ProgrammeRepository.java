@@ -28,6 +28,7 @@ public interface ProgrammeRepository extends JpaRepository<Programme,Long> {
         AND (:episodeDescription IS NULL OR :episodeDescription = '' OR LOWER(e.description) LIKE LOWER(CONCAT('%', :episodeDescription, '%')))
         AND (:episodeNumber IS NULL OR e.episodeNumber = :episodeNumber)
         AND (CAST(:episodePublishedDate AS date) IS NULL OR e.publishedDate = CAST(:episodePublishedDate AS date))
+        AND (:episodeDuration IS NULL OR e.duration = :episodeDuration)
         """)
         Page<Programme> filterAndFindProgrammes(
                 @Param("programmeSubject") String programmeSubject,
@@ -39,6 +40,7 @@ public interface ProgrammeRepository extends JpaRepository<Programme,Long> {
                 @Param("episodeDescription") String episodeDescription,
                 @Param("episodeNumber") Integer episodeNumber,
                 @Param("episodePublishedDate") LocalDate episodePublishedDate,
+                @Param("episodeDuration") Double episodeDuration,
                 Pageable pageable
         );
 

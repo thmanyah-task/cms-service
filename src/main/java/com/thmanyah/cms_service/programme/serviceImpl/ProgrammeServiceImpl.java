@@ -124,6 +124,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
             String episodeDescription,
             Integer episodeNumber,
             LocalDate episodePublishedDate,
+            Double episodeDuration,
             Integer page,
             Integer size) {
         Pageable pageable;
@@ -143,6 +144,7 @@ public class ProgrammeServiceImpl implements ProgrammeService {
                 episodeDescription,
                 episodeNumber,
                 episodePublishedDate,
+                episodeDuration,
                 pageable
         );
 
