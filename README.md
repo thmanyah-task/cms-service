@@ -209,8 +209,7 @@ categoryNameAr,LanguageNameAr,episodeSubject,episodeDescription
 يمكن الاطلاع على الشكل المعماري الجديد للتطبيق في الصفحة القادمة
 
 الشكل الحالي يوضح الرسم المعماري الجديد المقترح و اضافة التحسينات
-![img_1.png](img_1.png)
-
+![img.png](img.png)
 
 
 
