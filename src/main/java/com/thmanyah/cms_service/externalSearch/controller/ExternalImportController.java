@@ -2,10 +2,12 @@ package com.thmanyah.cms_service.externalSearch.controller;
 
 
 import com.thmanyah.cms_service.externalSearch.enumerations.SourceType;
-import com.thmanyah.cms_service.externalSearch.service.ExternalImportService;
+import com.thmanyah.cms_service.externalSearch.service.ExternalImportServiceImpl;
+import com.thmanyah.cms_service.externalSearch.serviceImpl.ExternalImportService;
 import com.thmanyah.cms_service.programme.dto.ProgrammeDto;
 import com.thmanyah.cms_service.shared.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +20,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/external-search")
+@RequiredArgsConstructor
 public class ExternalImportController {
 
     private final ExternalImportService importService;
 
-    public ExternalImportController(ExternalImportService importService) {
-        this.importService = importService;
-    }
 
 
     @GetMapping("/import")
